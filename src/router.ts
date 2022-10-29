@@ -3,7 +3,8 @@ import ChartOfAccounts from 'src/pages/ChartOfAccounts.vue';
 import Dashboard from 'src/pages/Dashboard/Dashboard.vue';
 import DataImport from 'src/pages/DataImport.vue';
 import GetStarted from 'src/pages/GetStarted.vue';
-import InvoiceForm from 'src/pages/InvoiceForm.vue';
+// import InvoiceForm from 'src/pages/InvoiceForm.vue';
+import InvoicePosForm from 'src/pages/InvoicePosForm.vue';
 import JournalEntryForm from 'src/pages/JournalEntryForm.vue';
 import ListView from 'src/pages/ListView/ListView.vue';
 import PrintView from 'src/pages/PrintView/PrintView.vue';
@@ -44,7 +45,7 @@ const routes: RouteRecordRaw[] = [
     path: '/edit/:schemaName/:name',
     name: 'InvoiceForm',
     components: {
-      default: InvoiceForm,
+      default: InvoicePosForm,
       edit: QuickEditForm,
     },
     props: {
