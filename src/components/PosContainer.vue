@@ -2,21 +2,33 @@
   <div class="flex bg-gray-25 PosContainer">
     <div class="flex flex-1 flex-col">
       <!-- Page Header (Title, Buttons, etc) -->
-      <PageHeader :title="title" :border="false" :searchborder="searchborder">
+      <PageHeader :title="t`Point of Sale`" :border="false" :searchborder="searchborder">
         <slot name="header" />
       </PageHeader>
+
+      
 
       <!-- Invoice Form -->
       <div
         class="
-          flex 
-          flex-col 
+          flex           
+          grid 
+          grid-cols-12
           bg-white 
           pos_container
           PosContainer
+          border-t
+          border-b
+          h-full
         "
       >
+      <div class="flex-none col-span-8  h-full flex-auto p-2">
+        <slot name="items" />
+      </div>
+      <div class="flex-none col-span-4 h-full border-l">
         <slot name="body" />
+      </div>
+        
       </div>
     </div>
 

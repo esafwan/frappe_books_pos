@@ -1,256 +1,439 @@
 <template>
-  <PosContainer>
-    <!-- Page Header (Title, Buttons, etc) -->
-    <template #header v-if="doc">
-      <StatusBadge :status="status" />
-      <ExchangeRate
-        v-if="doc.isMultiCurrency"
-        :disabled="doc?.isSubmitted || doc?.isCancelled"
-        :from-currency="fromCurrency"
-        :to-currency="toCurrency"
-        :exchange-rate="doc.exchangeRate"
-        @change="
-          async (exchangeRate) => await doc.set('exchangeRate', exchangeRate)
-        "
-      />
-      <Button
-        v-if="!doc.isCancelled && !doc.dirty"
-        :icon="true"
-        @click="routeTo(`/print/${doc.schemaName}/${doc.name}`)"
-      >
-        {{ t`Print` }}
-      </Button>
-      <Button
-        :icon="true"
-        v-if="!doc?.isSubmitted && doc.enableDiscounting"
-        @click="toggleInvoiceSettings"
-      >
-        <feather-icon name="settings" class="w-4 h-4" />
-      </Button>
-      <DropdownWithActions :actions="actions()" />
-      <Button
-        v-if="doc?.notInserted || doc?.dirty"
-        type="primary"
-        @click="sync"
-      >
-        {{ t`Save` }}
-      </Button>
-      <Button
-        v-if="!doc?.dirty && !doc?.notInserted && !doc?.submitted"
-        type="primary"
-        @click="submit"
-        >{{ t`Submit` }}</Button
-      >
-    </template>
-
-    <!-- Invoice Form -->
-    <template #body v-if="doc">
-      <FormHeader
-        :form-title="doc.notInserted ? t`Point of Sale` :  + doc.name"
-        :form-sub-title="
-          doc.schemaName === 'SalesInvoice'
-            ? t`POS Invoice`
-            : t`Purchase Invoice`
-        "
-        class="attempt-header"
-      />
-      <hr />
-
-      <div>
-        <!-- Invoice Form Data Entry -->
-        <div class="m-4 grid grid-cols-3 gap-4 attempt-form-data-entry">
-          <FormControl
-            input-class="font-semibold"
-            :border="true"
-            :df="getField('party')"
-            :value="doc.party"
-            @change="(value) => doc.set('party', value, true)"
-            @new-doc="(party) => doc.set('party', party.name, true)"
-            :read-only="doc?.submitted"
-          />            
-          <FormControl
-            :border="true"
-            :df="getField('account')"
-            :value="doc.account"
-            @change="(value) => doc.set('account', value)"
-            :read-only="doc?.submitted"
+  <PosContainer>        
+        <!-- Page Header (Title, Buttons, etc) -->
+        <template #header v-if="doc">          
+          <StatusBadge :status="status" />
+          <ExchangeRate
+            v-if="doc.isMultiCurrency"
+            :disabled="doc?.isSubmitted || doc?.isCancelled"
+            :from-currency="fromCurrency"
+            :to-currency="toCurrency"
+            :exchange-rate="doc.exchangeRate"
+            @change="
+              async (exchangeRate) => await doc.set('exchangeRate', exchangeRate)
+            "
           />
-          
-        </div>
-        <hr />
+          <Button
+            v-if="!doc.isCancelled && !doc.dirty"
+            :icon="true"
+            @click="routeTo(`/print/${doc.schemaName}/${doc.name}`)"
+          >
+            {{ t`Print` }}
+          </Button>
+          <Button
+            :icon="true"
+            v-if="!doc?.isSubmitted && doc.enableDiscounting"
+            @click="toggleInvoiceSettings"
+          >
+            <feather-icon name="settings" class="w-4 h-4" />
+          </Button>
+          <DropdownWithActions :actions="actions()" />
+          <Button
+            v-if="doc?.notInserted || doc?.dirty"
+            type="primary"
+            @click="sync"
+          >
+            {{ t`Save` }}
+          </Button>
+          <Button
+            v-if="!doc?.dirty && !doc?.notInserted && !doc?.submitted"
+            type="primary"
+            @click="submit"
+            >{{ t`Submit` }}</Button
+          >
+        </template>
+        <template #items v-if="doc">          
+          <div>
+            <div class="container my-12 mx-auto px-4 md:px-12">
+              <div class="flex flex-wrap -mx-1 lg:-mx-4">
 
-        <!-- Invoice Items Table -->
-        <Table
-          class="text-base"
-          :df="getField('items')"
-          :value="doc.items"
-          :showHeader="true"
-          :max-rows-before-overflow="4"
-          @change="(value) => doc.set('items', value)"
-          @editrow="toggleQuickEditDoc"
-          :read-only="doc?.submitted"
-        />
-      </div>
+             <!-- Column -->
+             <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
 
-      <!-- Invoice Form Footer -->
+                <!-- Article -->
+                <article class="overflow-hidden rounded-lg shadow-lg">
 
-      <div v-if="doc.items?.length ?? 0" class="mt-auto">
-        <hr />
-        <div class="flex justify-between text-base m-4 gap-12">
-          <div class="w-1/2 flex flex-col justify-between">
-            <!-- Discount Note -->
-            <p v-if="discountNote?.length" class="text-gray-600 text-sm">
-              {{ discountNote }}
-            </p>
-            <!-- Form Terms-->
-            <FormControl
-              :border="true"
-              v-if="!doc?.submitted || doc.terms"
-              :df="getField('terms')"
-              :value="doc.terms"
-              class="mt-auto"
-              @change="(value) => doc.set('terms', value)"
+                    <a href="#">
+                        <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
+                    </a>
+
+                    <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                        <h1 class="text-lg">
+                            <a class="no-underline hover:underline text-black" href="#">
+                                Watch
+                            </a>
+                        </h1>                              
+                    </header>
+
+                    <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                        <a class="flex items-center no-underline hover:underline text-black" href="#">                            
+                            <p class="ml-2 text-sm">
+                                $ 10
+                            </p>
+                        </a>                             
+                    </footer>
+                </article>
+                <!-- END Article -->
+
+                </div>
+                <!-- END Column -->
+             <!-- Column -->
+             <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+            <!-- Article -->
+            <article class="overflow-hidden rounded-lg shadow-lg">
+
+                <a href="#">
+                    <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
+                </a>
+
+                <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                    <h1 class="text-lg">
+                        <a class="no-underline hover:underline text-black" href="#">
+                            Watch
+                        </a>
+                    </h1>                              
+                </header>
+
+                <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                    <a class="flex items-center no-underline hover:underline text-black" href="#">                            
+                        <p class="ml-2 text-sm">
+                            $ 10
+                        </p>
+                    </a>                             
+                </footer>
+            </article>
+            <!-- END Article -->
+
+            </div>
+            <!-- END Column -->
+            
+                        <!-- Column -->
+                        <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+            <!-- Article -->
+            <article class="overflow-hidden rounded-lg shadow-lg">
+
+                <a href="#">
+                    <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
+                </a>
+
+                <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                    <h1 class="text-lg">
+                        <a class="no-underline hover:underline text-black" href="#">
+                            Watch
+                        </a>
+                    </h1>                              
+                </header>
+
+                <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                    <a class="flex items-center no-underline hover:underline text-black" href="#">                            
+                        <p class="ml-2 text-sm">
+                            $ 10
+                        </p>
+                    </a>                             
+                </footer>
+            </article>
+            <!-- END Article -->
+
+            </div>
+            <!-- END Column -->
+            <!-- Column -->
+            <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+            <!-- Article -->
+            <article class="overflow-hidden rounded-lg shadow-lg">
+
+            <a href="#">
+                <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
+            </a>
+
+            <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                <h1 class="text-lg">
+                    <a class="no-underline hover:underline text-black" href="#">
+                        Watch
+                    </a>
+                </h1>                              
+            </header>
+
+            <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                <a class="flex items-center no-underline hover:underline text-black" href="#">                            
+                    <p class="ml-2 text-sm">
+                        $ 10
+                    </p>
+                </a>                             
+            </footer>
+            </article>
+            <!-- END Article -->
+
+            </div>
+            <!-- END Column -->
+                        <!-- Column -->
+                        <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+            <!-- Article -->
+            <article class="overflow-hidden rounded-lg shadow-lg">
+
+                <a href="#">
+                    <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
+                </a>
+
+                <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                    <h1 class="text-lg">
+                        <a class="no-underline hover:underline text-black" href="#">
+                            Watch
+                        </a>
+                    </h1>                              
+                </header>
+
+                <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                    <a class="flex items-center no-underline hover:underline text-black" href="#">                            
+                        <p class="ml-2 text-sm">
+                            $ 10
+                        </p>
+                    </a>                             
+                </footer>
+            </article>
+            <!-- END Article -->
+
+            </div>
+            <!-- END Column -->
+            <!-- Column -->
+            <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+            <!-- Article -->
+            <article class="overflow-hidden rounded-lg shadow-lg">
+
+            <a href="#">
+                <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
+            </a>
+
+            <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                <h1 class="text-lg">
+                    <a class="no-underline hover:underline text-black" href="#">
+                        Watch
+                    </a>
+                </h1>                              
+            </header>
+
+            <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                <a class="flex items-center no-underline hover:underline text-black" href="#">                            
+                    <p class="ml-2 text-sm">
+                        $ 10
+                    </p>
+                </a>                             
+            </footer>
+            </article>
+            <!-- END Article -->
+
+            </div>
+            <!-- END Column -->
+ 
+              </div>
+            </div>
+          </div>
+        </template>
+        <!-- Invoice Form -->
+        <template #body v-if="doc">
+     
+
+          <div>
+            <!-- Invoice Form Data Entry -->
+            <div class="m-4 grid grid-cols-3 gap-4 attempt-form-data-entry">
+              <FormControl
+                input-class="font-semibold"
+                :border="true"
+                :df="getField('party')"
+                :value="doc.party"
+                @change="(value) => doc.set('party', value, true)"
+                @new-doc="(party) => doc.set('party', party.name, true)"
+                :read-only="doc?.submitted"
+              />            
+              <FormControl
+                :border="true"
+                :df="getField('account')"
+                :value="doc.account"
+                @change="(value) => doc.set('account', value)"
+                :read-only="doc?.submitted"
+              />
+              
+            </div>
+            <hr />
+
+            <!-- Invoice Items Table -->
+            <Table
+              class="text-base"
+              :df="getField('items')"
+              :value="doc.items"
+              :showHeader="true"
+              :max-rows-before-overflow="4"
+              @change="(value) => doc.set('items', value)"
+              @editrow="toggleQuickEditDoc"
               :read-only="doc?.submitted"
             />
           </div>
 
-          <!-- Totals -->
-          <div class="w-1/2 gap-2 flex flex-col self-end ml-auto">
-            <!-- Subtotal -->
-            <div class="flex justify-between">
-              <div>{{ t`Subtotal` }}</div>
-              <div>{{ formattedValue('netTotal') }}</div>
-            </div>
+          <!-- Invoice Form Footer -->
+
+          <div v-if="doc.items?.length ?? 0" class="mt-auto">
             <hr />
+            <div class="flex justify-between text-base m-4 gap-12">
+              <div class="w-1/2 flex flex-col justify-between">
+                <!-- Discount Note -->
+                <p v-if="discountNote?.length" class="text-gray-600 text-sm">
+                  {{ discountNote }}
+                </p>
+                <!-- Form Terms-->
+                <FormControl
+                  :border="true"
+                  v-if="!doc?.submitted || doc.terms"
+                  :df="getField('terms')"
+                  :value="doc.terms"
+                  class="mt-auto"
+                  @change="(value) => doc.set('terms', value)"
+                  :read-only="doc?.submitted"
+                />
+              </div>
 
-            <!-- Discount Applied Before Taxes -->
-            <div
-              v-if="totalDiscount.float > 0 && !doc.discountAfterTax"
-              class="flex flex-col gap-2"
-            >
-              <div
-                class="flex justify-between"
-                v-if="itemDiscountAmount.float > 0"
-              >
-                <div>{{ t`Discount` }}</div>
-                <div>
-                  {{ `- ${fyo.format(itemDiscountAmount, 'Currency')}` }}
+              <!-- Totals -->
+              <div class="w-1/2 gap-2 flex flex-col self-end ml-auto">
+                <!-- Subtotal -->
+                <div class="flex justify-between">
+                  <div>{{ t`Subtotal` }}</div>
+                  <div>{{ formattedValue('netTotal') }}</div>
+                </div>
+                <hr />
+
+                <!-- Discount Applied Before Taxes -->
+                <div
+                  v-if="totalDiscount.float > 0 && !doc.discountAfterTax"
+                  class="flex flex-col gap-2"
+                >
+                  <div
+                    class="flex justify-between"
+                    v-if="itemDiscountAmount.float > 0"
+                  >
+                    <div>{{ t`Discount` }}</div>
+                    <div>
+                      {{ `- ${fyo.format(itemDiscountAmount, 'Currency')}` }}
+                    </div>
+                  </div>
+                  <div class="flex justify-between" v-if="discountAmount.float > 0">
+                    <div>{{ t`Invoice Discount` }}</div>
+                    <div>{{ `- ${fyo.format(discountAmount, 'Currency')}` }}</div>
+                  </div>
+                  <hr v-if="doc.taxes?.length" />
+                </div>
+
+                <!-- Taxes -->
+                <div
+                  v-if="doc.taxes?.length"
+                  class="flex flex-col gap-2 max-h-12 overflow-y-auto"
+                >
+                  <div
+                    class="flex justify-between"
+                    v-for="tax in doc.taxes"
+                    :key="tax.name"
+                  >
+                    <div>{{ tax.account }}</div>
+                    <div>
+                      {{
+                        fyo.format(
+                          tax.amount,
+                          {
+                            fieldtype: 'Currency',
+                            fieldname: 'amount',
+                          },
+                          tax
+                        )
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <hr v-if="doc.taxes?.length" />
+
+                <!-- Discount Applied After Taxes -->
+                <div
+                  v-if="totalDiscount.float > 0 && doc.discountAfterTax"
+                  class="flex flex-col gap-2"
+                >
+                  <div
+                    class="flex justify-between"
+                    v-if="itemDiscountAmount.float > 0"
+                  >
+                    <div>{{ t`Discount` }}</div>
+                    <div>
+                      {{ `- ${fyo.format(itemDiscountAmount, 'Currency')}` }}
+                    </div>
+                  </div>
+                  <div class="flex justify-between" v-if="discountAmount.float > 0">
+                    <div>{{ t`Invoice Discount` }}</div>
+                    <div>{{ `- ${fyo.format(discountAmount, 'Currency')}` }}</div>
+                  </div>
+                  <hr />
+                </div>
+
+                <!-- Grand Total -->
+                <div
+                  class="
+                    flex
+                    justify-between
+                    text-green-600
+                    font-semibold
+                    text-base
+                  "
+                >
+                  <div>{{ t`Grand Total` }}</div>
+                  <div>{{ formattedValue('grandTotal') }}</div>
+                </div>
+
+                <!-- Base Grand Total -->
+                <div
+                  v-if="doc.isMultiCurrency"
+                  class="
+                    flex
+                    justify-between
+                    text-green-600
+                    font-semibold
+                    text-base
+                  "
+                >
+                  <div>{{ t`Base Grand Total` }}</div>
+                  <div>{{ formattedValue('baseGrandTotal') }}</div>
+                </div>
+
+                <!-- Outstanding Amount -->
+                <hr v-if="doc.outstandingAmount?.float > 0" />
+                <div
+                  v-if="doc.outstandingAmount?.float > 0"
+                  class="flex justify-between text-red-600 font-semibold text-base"
+                >
+                  <div>{{ t`Outstanding Amount` }}</div>
+                  <div>{{ formattedValue('outstandingAmount') }}</div>
                 </div>
               </div>
-              <div class="flex justify-between" v-if="discountAmount.float > 0">
-                <div>{{ t`Invoice Discount` }}</div>
-                <div>{{ `- ${fyo.format(discountAmount, 'Currency')}` }}</div>
-              </div>
-              <hr v-if="doc.taxes?.length" />
-            </div>
-
-            <!-- Taxes -->
-            <div
-              v-if="doc.taxes?.length"
-              class="flex flex-col gap-2 max-h-12 overflow-y-auto"
-            >
-              <div
-                class="flex justify-between"
-                v-for="tax in doc.taxes"
-                :key="tax.name"
-              >
-                <div>{{ tax.account }}</div>
-                <div>
-                  {{
-                    fyo.format(
-                      tax.amount,
-                      {
-                        fieldtype: 'Currency',
-                        fieldname: 'amount',
-                      },
-                      tax
-                    )
-                  }}
-                </div>
-              </div>
-            </div>
-            <hr v-if="doc.taxes?.length" />
-
-            <!-- Discount Applied After Taxes -->
-            <div
-              v-if="totalDiscount.float > 0 && doc.discountAfterTax"
-              class="flex flex-col gap-2"
-            >
-              <div
-                class="flex justify-between"
-                v-if="itemDiscountAmount.float > 0"
-              >
-                <div>{{ t`Discount` }}</div>
-                <div>
-                  {{ `- ${fyo.format(itemDiscountAmount, 'Currency')}` }}
-                </div>
-              </div>
-              <div class="flex justify-between" v-if="discountAmount.float > 0">
-                <div>{{ t`Invoice Discount` }}</div>
-                <div>{{ `- ${fyo.format(discountAmount, 'Currency')}` }}</div>
-              </div>
-              <hr />
-            </div>
-
-            <!-- Grand Total -->
-            <div
-              class="
-                flex
-                justify-between
-                text-green-600
-                font-semibold
-                text-base
-              "
-            >
-              <div>{{ t`Grand Total` }}</div>
-              <div>{{ formattedValue('grandTotal') }}</div>
-            </div>
-
-            <!-- Base Grand Total -->
-            <div
-              v-if="doc.isMultiCurrency"
-              class="
-                flex
-                justify-between
-                text-green-600
-                font-semibold
-                text-base
-              "
-            >
-              <div>{{ t`Base Grand Total` }}</div>
-              <div>{{ formattedValue('baseGrandTotal') }}</div>
-            </div>
-
-            <!-- Outstanding Amount -->
-            <hr v-if="doc.outstandingAmount?.float > 0" />
-            <div
-              v-if="doc.outstandingAmount?.float > 0"
-              class="flex justify-between text-red-600 font-semibold text-base"
-            >
-              <div>{{ t`Outstanding Amount` }}</div>
-              <div>{{ formattedValue('outstandingAmount') }}</div>
             </div>
           </div>
-        </div>
-      </div>
-    </template>
+        </template>
 
-    <template #quickedit v-if="quickEditDoc">
-      <QuickEditForm
-        class="w-quick-edit"
-        :name="quickEditDoc.name"
-        :show-name="false"
-        :show-save="false"
-        :source-doc="quickEditDoc"
-        :source-fields="quickEditFields"
-        :schema-name="quickEditDoc.schemaName"
-        :white="true"
-        :route-back="false"
-        :load-on-close="false"
-        @close="toggleQuickEditDoc(null)"
-      />
-    </template>
+        <template #quickedit v-if="quickEditDoc" class="qdoc">
+          <QuickEditForm
+            class="w-quick-edit"
+            :name="quickEditDoc.name"
+            :show-name="false"
+            :show-save="false"
+            :source-doc="quickEditDoc"
+            :source-fields="quickEditFields"
+            :schema-name="quickEditDoc.schemaName"
+            :white="true"
+            :route-back="false"
+            :load-on-close="false"
+            @close="toggleQuickEditDoc(null)"
+          />
+        </template>
+    
   </PosContainer>
+  
 </template>
 <script>
 import { computed } from '@vue/reactivity';
@@ -262,7 +445,6 @@ import FormControl from 'src/components/Controls/FormControl.vue';
 import Table from 'src/components/Controls/Table.vue';
 import DropdownWithActions from 'src/components/DropdownWithActions.vue';
 import PosContainer from 'src/components/PosContainer.vue';
-import FormHeader from 'src/components/FormHeader.vue';
 import StatusBadge from 'src/components/StatusBadge.vue';
 import { fyo } from 'src/initFyo';
 import { docsPathMap } from 'src/utils/misc';
@@ -287,8 +469,7 @@ export default {
     Table,
     PosContainer,
     QuickEditForm,
-    ExchangeRate,
-    FormHeader,
+    ExchangeRate    
   },
   provide() {
     return {
