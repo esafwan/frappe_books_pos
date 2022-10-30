@@ -22,10 +22,10 @@
           h-full
         "
       >
-      <div class="flex-none col-span-8  h-full flex-auto p-2">
+      <div class="flex-none col-span-7  h-full flex-auto p-2">
         <slot name="items" />
       </div>
-      <div class="flex-none col-span-4 h-full border-l">
+      <div class="flex-none col-span-5 h-full border-l">
         <slot name="body" />
       </div>
         

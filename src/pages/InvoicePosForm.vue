@@ -45,22 +45,33 @@
         <template #items v-if="doc">          
           <div>
             <div class="container my-12 mx-auto px-4 md:px-12">
-              <div class="flex flex-wrap -mx-1 lg:-mx-4">
-
+              <div class="flex flex-wrap -mx-1 lg:-mx-6">
+                
              <!-- Column -->
-             <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+             <div v-for="item in items" :key="item.name" class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
 
-                <!-- Article -->
-                <article class="overflow-hidden border rounded">
+                <!-- Item -->
+                <article class="overflow-hidden border rounded content-center h-60 pt-5">
 
                     <a href="#">
-                        <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
+                        <img  :alt="item.name" class="object-cover self-center h-40 w-120" :src="item.image" v-if="item.image">
+                        <div  alt="no_image" class="object-cover self-center h-40 w-120" :src="item.image" v-else></div>
                     </a>
 
-                    <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                    <header class="flex items-center justify-between leading-tight p-2 md:p-4 min-h-25">
                         <h1 class="text-lg">
                             <a class="no-underline hover:underline text-black" href="#">
-                                <strong>Watch</strong>  - $ 10
+                                
+                                <Button
+                                    class="font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+                                    :icon="true"
+                                    type="primary"
+                                    @click="addItem"
+                                    :padding="false"                                   
+                                  >
+                                    <span class="mr-1">{{ item.name }}</span>                                  
+                                    <feather-icon name="plus" class="w-4 h-4" />
+                                  </Button>
                             </a>
                         </h1>                              
                     </header>
@@ -68,129 +79,9 @@
                 </article>
                 <!-- END Article -->
 
-                </div>
+              </div>
                 <!-- END Column -->
-             <!-- Column -->
-             <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-            <!-- Article -->
-            <article class="overflow-hidden border rounded">
-
-                <a href="#">
-                    <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
-                </a>
-
-                <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                        <h1 class="text-lg">
-                            <a class="no-underline hover:underline text-black" href="#">
-                                <strong>Watch</strong>  - $ 10
-                            </a>
-                        </h1>                              
-                    </header>
-
-                
-            </article>
-            <!-- END Article -->
-
-            </div>
-            <!-- END Column -->
             
-                        <!-- Column -->
-                        <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-            <!-- Article -->
-            <article class="overflow-hidden border rounded">
-
-                <a href="#">
-                    <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
-                </a>
-
-                <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                        <h1 class="text-lg">
-                            <a class="no-underline hover:underline text-black" href="#">
-                                <strong>Watch</strong>  - $ 10
-                            </a>
-                        </h1>                              
-                    </header>
-
-                
-            </article>
-            <!-- END Article -->
-
-            </div>
-            <!-- END Column -->
-            <!-- Column -->
-            <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-            <!-- Article -->
-            <article class="overflow-hidden border rounded">
-
-            <a href="#">
-                <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
-            </a>
-
-            <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                    <a class="no-underline hover:underline text-black" href="#">
-                      <strong>Watch</strong>  - $ 10
-                    </a>
-                </h1>                              
-            </header>
-
-            
-            </article>
-            <!-- END Article -->
-
-            </div>
-            <!-- END Column -->
-                        <!-- Column -->
-                        <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-            <!-- Article -->
-            <article class="overflow-hidden border rounded">
-
-                <a href="#">
-                    <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
-                </a>
-
-                <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                        <h1 class="text-lg">
-                            <a class="no-underline hover:underline text-black" href="#">
-                                <strong>Watch</strong>  - $ 10
-                            </a>
-                        </h1>                              
-                    </header>
-
-                
-            </article>
-            <!-- END Article -->
-
-            </div>
-            <!-- END Column -->
-            <!-- Column -->
-            <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-            <!-- Article -->
-            <article class="overflow-hidden border rounded">
-
-            <a href="#">
-                <img alt="Placeholder" class="block h-auto w-full" src="https://source.unsplash.com/random/600x400/?watch">
-            </a>
-
-            <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                    <a class="no-underline hover:underline text-black" href="#">
-                      <strong>Watch</strong>  - $ 10
-                    </a>
-                </h1>                              
-            </header>
-
-            
-            </article>
-            <!-- END Article -->
-
-            </div>
-            <!-- END Column -->
  
               </div>
             </div>
@@ -450,6 +341,7 @@ export default {
       color: null,
       printSettings: null,
       companyName: null,
+      items: null,
     };
   },
   updated() {
@@ -525,6 +417,7 @@ export default {
     if (fyo.store.isDevelopment) {
       window.inv = this;
     }
+    this.getItems();
   },
   methods: {
     routeTo,
@@ -538,6 +431,25 @@ export default {
       );
 
       this.toggleQuickEditDoc(this.doc, fields);
+    },
+    async getItems (){
+      this.items = (
+        await fyo.db.getAll('Item', {
+          fields: ['*']
+        })
+      );
+
+      console.log(this.items)
+                    
+    },
+    async addItem(item = null) {    
+      let item_doc = await fyo.doc.getDoc("Item", "Nokia N95");
+      console.log(item_doc);
+      this.doc.set("Item",{
+        item: item_doc.name,
+        rate: item_doc.rate,
+        tax: item_doc.tax
+      });
     },
     async toggleQuickEditDoc(doc, fields = []) {
       if (this.quickEditDoc && doc) {
