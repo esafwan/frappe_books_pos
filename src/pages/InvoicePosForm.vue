@@ -379,7 +379,7 @@
           </div>
         </template>
 
-        <template #quickedit v-if="quickEditDoc" class="qdoc">
+        <template #quickedit v-if="quickEditDoc">
           <QuickEditForm
             class="w-quick-edit"
             :name="quickEditDoc.name"
