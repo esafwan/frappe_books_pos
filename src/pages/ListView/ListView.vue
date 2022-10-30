@@ -12,6 +12,18 @@
       <Button
         :icon="true"
         type="primary"
+        @click="openPos"
+        :padding="false"
+        class="px-3"
+        v-if="this.schemaName === 'SalesInvoice'"        
+      >
+        <feather-icon name="layout" class="w-4 h-4" />
+        <span class="ml-1">{{ t`Open POS` }} </span>
+        
+      </Button>
+      <Button
+        :icon="true"
+        type="primary"
         @click="makeNewDoc"
         :padding="false"
         class="px-3"
@@ -87,13 +99,23 @@ export default {
     },
     async makeNewDoc() {
       const doc = await fyo.doc.getNewDoc(this.schemaName, this.filters ?? {});
-      const path = this.getFormPath(doc.name);
-
-      routeTo(path);
+      const path = this.getFormPath(doc.name);      
+      routeTo(path);      
       doc.on('afterSync', () => {
-        const path = this.getFormPath(doc.name);
+        const path = this.getFormPath(doc.name);        
         this.$router.replace(path);
       });
+    },
+    //Need review. Badly implemented code
+    async openPos() {
+      const doc = await fyo.doc.getNewDoc(this.schemaName, this.filters ?? {});
+      //Need to understand a better method from Frappe Team.
+      const path = "/pos/SalesInvoice/" + doc.name;            
+      routeTo(path);
+      doc.on('afterSync', () => {
+        const path =  "/pos/SalesInvoice/" + doc.name;
+        this.$router.replace(path);
+      });      
     },
     applyFilter(filters) {
       this.$refs.list.updateData(filters);
@@ -127,7 +149,7 @@ export default {
     },
     fields() {
       return fyo.schemaMap[this.schemaName].fields;
-    },
+    }    
   },
 };
 
