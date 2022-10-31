@@ -22,7 +22,7 @@
           h-full
         "
       >
-      <div class="flex-none col-span-7  h-full flex-auto p-2">
+      <div class="flex-none col-span-7  h-full flex-auto p-2 overflow-scroll pb-20">
         <slot name="items" />
       </div>
       <div class="flex-none col-span-5 h-full border-l">

@@ -44,45 +44,35 @@
         </template>
         <template #items v-if="doc">          
           <div>
-            <div class="container my-12 mx-auto px-4 md:px-12">
-              <div class="flex flex-wrap -mx-1 lg:-mx-6">
+            <div class="container x-auto">
+              <div class="flex flex-wrap">
                 
              <!-- Column -->
-             <div v-for="item in items" :key="item.name" class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+             <div v-for="item in items" :key="item.name" class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">                
+                <article class="overflow-hidden border rounded content-center h-60 pt-2 pl-2 pr-2">
+                  <h3 class="text-base font-medium mr-1 truncate ...">{{ item.name }}</h3>    
 
-                <!-- Item -->
-                <article class="overflow-hidden border rounded content-center h-60 pt-5">
-
-                    <a href="#">
+                  <a href="#"  @click="addItem(item.name)">
                         <img  :alt="item.name" class="object-cover self-center h-40 w-120" :src="item.image" v-if="item.image">
-                        <div  alt="no_image" class="object-cover self-center h-40 w-120" :src="item.image" v-else></div>
-                    </a>
-
-                    <header class="flex items-center justify-between leading-tight p-2 md:p-4 min-h-25">
-                        <h1 class="text-lg">
-                            <a class="no-underline hover:underline text-black" href="#">
-                                
-                                <Button
-                                    class="font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-                                    :icon="true"
-                                    type="primary"
-                                    @click="addItem(item.name)"
-                                    :padding="false"                                   
-                                  >
-                                    <span class="mr-1">{{ item.name }}</span>                                  
-                                    <feather-icon name="plus" class="w-4 h-4" />
-                                  </Button>
-                            </a>
-                        </h1>                              
-                    </header>
+                        <div  alt="no_image" class="object-cover self-center h-40 w-120 pt-10 " :src="item.image" v-else>
+                          <feather-icon name="camera-off" class="w-4 h-4 m-auto" />
+                        </div>
+                  </a>
+                  
+                  <Button
+                      class="font-semibold pl-5 pr-3 border border-gray-400 rounded shadow w-full mt-2"
+                      :icon="true"
+                      type="primary"
+                      @click="addItem(item.name)"
+                      :padding="false"                                   
+                    >
+                      <span class="mr-1">ADD</span>                                  
+                      <feather-icon name="plus" class="w-4 h-4" />
+                    </Button>                                                                                  
+                  
                    
-                </article>
-                <!-- END Article -->
-
+                </article>                
               </div>
-                <!-- END Column -->
-            
- 
               </div>
             </div>
           </div>
