@@ -66,7 +66,7 @@
                                     class="font-semibold py-2 px-4 border border-gray-400 rounded shadow"
                                     :icon="true"
                                     type="primary"
-                                    @click="addItem"
+                                    @click="addItem(item.name)"
                                     :padding="false"                                   
                                   >
                                     <span class="mr-1">{{ item.name }}</span>                                  
@@ -437,19 +437,16 @@ export default {
         await fyo.db.getAll('Item', {
           fields: ['*']
         })
-      );
-
-      console.log(this.items)
-                    
+      );                    
     },
     async addItem(item = null) {    
-      let item_doc = await fyo.doc.getDoc("Item", "Nokia N95");
-      console.log(item_doc);
-      this.doc.set("Item",{
+      let item_doc = await fyo.doc.getDoc("Item", item);      
+      this.doc.append("items",{
         item: item_doc.name,
         rate: item_doc.rate,
         tax: item_doc.tax
-      });
+  });
+
     },
     async toggleQuickEditDoc(doc, fields = []) {
       if (this.quickEditDoc && doc) {
