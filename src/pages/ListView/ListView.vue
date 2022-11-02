@@ -58,6 +58,7 @@ import PageHeader from 'src/components/PageHeader.vue';
 import { fyo } from 'src/initFyo';
 import { docsPathMap } from 'src/utils/misc';
 import { docsPath, routeTo } from 'src/utils/ui';
+import { ModelNameEnum } from '../../../models/types';
 import List from './List';
 
 export default {
@@ -108,12 +109,12 @@ export default {
     },
     //Need review. Badly implemented code
     async openPos() {
-      const doc = await fyo.doc.getNewDoc(this.schemaName, this.filters ?? {});
+      const doc = await fyo.doc.getNewDoc(ModelNameEnum.SalesInvoice, this.filters ?? {});
       //Need to understand a better method from Frappe Team.
-      const path = "/pos/SalesInvoice/" + doc.name;            
+      const path =  `/pos/SalesInvoice/${doc.name}`;      
       routeTo(path);
       doc.on('afterSync', () => {
-        const path =  "/pos/SalesInvoice/" + doc.name;
+        const path =  `/pos/SalesInvoice/${doc.name}`;
         this.$router.replace(path);
       });      
     },
